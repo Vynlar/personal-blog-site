@@ -1,6 +1,6 @@
 /* @jsx jsx */
 import React from "react"
-import { Link } from "gatsby"
+import { Link, useStaticQuery, graphql } from "gatsby"
 import { jsx, keyframes } from "@emotion/core"
 
 import {
@@ -25,13 +25,13 @@ import {
   FiCpu,
   FiImage,
   FiUser,
-  FiSearch,
 } from "react-icons/fi"
 import { MdCopyright } from "react-icons/md"
 import { IoMdHand } from "react-icons/io"
 
 import Layout from "../components/layout"
 import Header from "../components/header"
+import SEO from "../components/seo"
 
 const Hero = () => {
   return (
@@ -280,6 +280,19 @@ const waveAnimation = keyframes({
 const Bold = props => <Text d="inline" fontWeight="bold" {...props} />
 
 const Footer = () => {
+  const data = useStaticQuery(graphql`
+    query FooterMetaQuery {
+      site {
+        siteMetadata {
+          email
+          author
+          github
+        }
+      }
+    }
+  `)
+  const { email, author, github } = data.site.siteMetadata
+
   return (
     <Box bg="orange.500" py="16" color="white">
       <Stack maxW="containers.lg" mx="auto" px="6" spacing="6">
@@ -298,6 +311,9 @@ const Footer = () => {
 
           <Stack isInline flex="1" justify="flex-end" spacing="2">
             <IconButton
+              as="a"
+              target="_blank"
+              href={`https://twitter.com/${author}`}
               icon={FiTwitter}
               size="lg"
               variant="ghost"
@@ -308,6 +324,9 @@ const Footer = () => {
             />
 
             <IconButton
+              as="a"
+              target="_blank"
+              href={`https://github.com/${github}`}
               icon={FiGithub}
               size="lg"
               variant="ghost"
@@ -340,20 +359,23 @@ const Footer = () => {
             My favorite technical tools are <Bold>React, Elm, and Elixir</Bold>.
             I love me a steaming latte or a milk stout.
           </Text>
-          <Text id="contact">
+          <Text>
             <Icon as={FiMail} mr="1" />
             <Bold>Contact</Bold>
             <br />
-            Drop me a line at <Bold>adrian.aleixandre@gmail.com</Bold> or on
-            Twitter{" "}
+            Drop me a line at{" "}
+            <ChakraLink href={`mailto:${email}`} fontWeight="bold">
+              {email}
+            </ChakraLink>{" "}
+            or on Twitter{" "}
             <ChakraLink
               textDecoration="underline"
               isExternal
-              href="https://twitter.com/_aaleixandre"
-              aria-label="Link to my twitter page @_aaleixandre"
+              href={`https://twitter.com/${author}`}
+              aria-label={`Link to my twitter page ${author}`}
             >
               <Icon as={FiTwitter} mr="1" />
-              @_aaleixandre
+              {author}
             </ChakraLink>
           </Text>
         </Stack>
@@ -400,6 +422,7 @@ const Footer = () => {
 
 const IndexPage = () => (
   <Layout>
+    <SEO title="Adrian Aleixandre" />
     <Header />
     <Hero />
     <Latest />

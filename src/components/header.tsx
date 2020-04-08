@@ -25,10 +25,13 @@ const Header = () => {
       site {
         siteMetadata {
           title
+          author
+          github
         }
       }
     }
   `)
+  const { author, github } = data.site.siteMetadata
 
   return (
     <Box bg="gray.900">
@@ -71,16 +74,14 @@ const Header = () => {
           isInline
           ml="auto"
           align="center"
-          spacing="5"
+          spacing="4"
         >
-          <ChakraLink href="#contact" fontWeight="600" fontFamily="heading">
-            About
-          </ChakraLink>
-
           <IconButton
-            aria-label="Go to my Twitter"
+            as="a"
+            target="_blank"
+            href={`https://twitter.com/${author}`}
+            aria-label={`Link to my Twitter ${author}`}
             rounded="full"
-            as={Link}
             icon={FiTwitter}
             color="black"
             _focus={{ bg: "blue.200", boxShadow: "outline" }}
@@ -89,13 +90,15 @@ const Header = () => {
           />
 
           <IconButton
-            aria-label="Go to my GitHub"
+            as="a"
+            target="_blank"
+            href={`https://github.com/${github}`}
+            aria-label={`Link to my Github: ${github}`}
             rounded="full"
-            as={Link}
             icon={FiGithub}
             color="black"
             _hover={{ bg: "gray.600", color: "white" }}
-            _focus={{ bg: "gray.200", boxShadow: "outline" }}
+            _focus={{ bg: "gray.400", boxShadow: "outline" }}
             _active={{ bg: "gray.800" }}
           />
         </Stack>
