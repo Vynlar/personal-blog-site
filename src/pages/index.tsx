@@ -87,7 +87,7 @@ const Hero = ({ post }) => {
               position="relative"
               gridArea="preview"
             >
-              <Text fontWeight="bold">
+              <Text>
                 {post.excerpt}
                 <Box
                   as="span"
@@ -200,7 +200,7 @@ const Post = ({ post, ...props }) => {
           pl={[0, "6"]}
         >
           <Box height="32" overflow="hidden" position="relative">
-            <Text fontWeight="bold" color="gray.700">
+            <Text color="gray.700">
               {post.excerpt}
               <Box
                 as="span"
@@ -264,15 +264,19 @@ const Latest = ({ posts }) => {
   )
 }
 
-const IndexPage = ({ data: { allMdx } }) => {
-  const posts = allMdx.edges.map(({ node }) => node)
+const IndexPage = ({ data: { featured, latest } }) => {
+  const featuredPost = featured.edges[0].node
+  const latestPosts = latest.edges
+    .map(({ node }) => node)
+    .filter(({ id }) => id !== featuredPost.id)
+    .slice(0, 3)
 
   return (
     <Layout>
       <SEO title="Adrian Aleixandre" />
       <Header />
-      <Hero post={posts[0]} />
-      <Latest posts={posts.slice(1)} />
+      <Hero post={featuredPost} />
+      <Latest posts={latestPosts} />
       <Footer />
     </Layout>
   )
@@ -280,21 +284,38 @@ const IndexPage = ({ data: { allMdx } }) => {
 
 export const pageQuery = graphql`
   query HomePageQuery {
-    allMdx(limit: 4, sort: { fields: frontmatter___published, order: DESC }) {
+    featured: allMdx(
+      limit: 1
+      sort: { fields: frontmatter___published, order: DESC }
+      filter: { frontmatter: { featured: { eq: true } } }
+    ) {
       edges {
         node {
-          id
-          body
-          timeToRead
-          excerpt(pruneLength: 500)
-          frontmatter {
-            slug
-            title
-            published(formatString: "MM.DD.YYYY")
-            tags
-          }
+          ...PostData
         }
       }
+    }
+    latest: allMdx(
+      limit: 4
+      sort: { fields: frontmatter___published, order: DESC }
+    ) {
+      edges {
+        node {
+          ...PostData
+        }
+      }
+    }
+  }
+  fragment PostData on Mdx {
+    id
+    body
+    timeToRead
+    excerpt(pruneLength: 500)
+    frontmatter {
+      slug
+      title
+      published(formatString: "MM.DD.YYYY")
+      tags
     }
   }
 `
