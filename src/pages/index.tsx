@@ -1,7 +1,7 @@
 /* @jsx jsx */
 import React from "react"
-import { Link, useStaticQuery, graphql } from "gatsby"
-import { jsx, keyframes } from "@emotion/core"
+import { Link, graphql } from "gatsby"
+import { jsx } from "@emotion/core"
 
 import {
   Heading,
@@ -13,27 +13,17 @@ import {
   Icon,
   Grid,
   Badge,
-  IconButton,
 } from "@chakra-ui/core"
 
-import {
-  FiChevronsRight,
-  FiTwitter,
-  FiHeart,
-  FiGithub,
-  FiMail,
-  FiCpu,
-  FiImage,
-  FiUser,
-} from "react-icons/fi"
-import { MdCopyright } from "react-icons/md"
-import { IoMdHand } from "react-icons/io"
+import { FiChevronsRight } from "react-icons/fi"
 
 import Layout from "../components/layout"
 import Header from "../components/header"
+import Footer from "../components/footer"
 import SEO from "../components/seo"
+import { possibleColors, getColorByIndex } from "../utils/color"
 
-const Hero = () => {
+const Hero = ({ post }) => {
   return (
     <Box bg="gray.800">
       <Flex
@@ -56,8 +46,14 @@ const Hero = () => {
             templateColumns={["1fr", "1fr 2fr"]}
           >
             <Box gridArea="title">
-              <Heading as={Link} size="2xl" mb={["0", "4"]}>
-                My case for Elm
+              <Heading
+                as={Link}
+                d="block"
+                to={`/post/${post.frontmatter.slug}`}
+                size="2xl"
+                mb={["0", "4"]}
+              >
+                {post.frontmatter.title}
               </Heading>
             </Box>
 
@@ -81,7 +77,7 @@ const Hero = () => {
                 mb="4"
               />
               <Text fontWeight="600" fontFamily="heading">
-                03.23.20
+                {post.frontmatter.published}
               </Text>
             </Box>
 
@@ -92,15 +88,10 @@ const Hero = () => {
               gridArea="preview"
             >
               <Text fontWeight="bold">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Facilis dolorum eos cupiditate recusandae ipsa suscipit veniam
-                quis quibusdam, sit sed velit accusamus. Commodi dolorem
-                perspiciatis, tempora ex est perferendis dolore. Lorem ipsum
-                dolor sit amet, consectetur adipisicing elit. Illo, quos et
-                corporis sed expedita nobis earum obcaecati nihil iure dolore
-                eaque quo, nesciunt rerum perspiciatis at. Magni earum vel
-                voluptatibus!
+                {post.excerpt}
                 <Box
+                  as="span"
+                  d="block"
                   position="absolute"
                   width="calc(100% + 10px)"
                   height="20"
@@ -118,12 +109,13 @@ const Hero = () => {
               gridArea="cta"
               mt={[5, 0]}
             >
-              <Link to="/">
+              <Link to={`/post/${post.frontmatter.slug}`}>
                 <ChakraLink
+                  as="span"
                   fontFamily="heading"
                   fontWeight="600"
                   _hover={{
-                    "&:hover > .icon": {
+                    "& > .icon": {
                       transform: "translate(4px, -1px)",
                     },
                   }}
@@ -146,7 +138,7 @@ const Hero = () => {
   )
 }
 
-const Post = props => {
+const Post = ({ post, ...props }) => {
   return (
     <Stack spacing="10" {...props}>
       <Grid
@@ -161,10 +153,11 @@ const Post = props => {
         templateColumns={["1fr", "1fr 3fr"]}
       >
         <Heading as="h3" size="lg" gridArea="title" pl={[0, "6"]}>
-          My case for Elm: Extended Edition, Part III
+          {post.frontmatter.title}
         </Heading>
 
         <Text
+          as="div"
           fontSize="sm"
           color="gray.600"
           fontFamily="heading"
@@ -173,16 +166,31 @@ const Post = props => {
           textAlign={["left", "right"]}
           pr="6"
         >
-          03.23.20
-          <br />3 minute read
-          <Stack isInline flexWrap="wrap" justify="flex-end" mt="2">
-            <Badge variant="outline" variantColor="green">
-              Elm
-            </Badge>
-            <Badge variant="outline" variantColor="orange">
-              Process
-            </Badge>
-          </Stack>
+          {post.frontmatter.published}
+          <br />
+          {post.timeToRead} minutes to read
+          <Flex
+            flexDirection={["row", "row-reverse"]}
+            mt="2"
+            flexWrap="wrap"
+            align="flex-start"
+            justify="flex-start"
+          >
+            {post.frontmatter.tags.map((tag, index) => {
+              return (
+                <Badge
+                  fontFamily="heading"
+                  variant="outline"
+                  variantColor={getColorByIndex(index)}
+                  mb="2"
+                  ml={[null, "2"]}
+                  mr={["2", 0]}
+                >
+                  {tag}
+                </Badge>
+              )
+            })}
+          </Flex>
         </Text>
 
         <Box
@@ -193,18 +201,10 @@ const Post = props => {
         >
           <Box height="32" overflow="hidden" position="relative">
             <Text fontWeight="bold" color="gray.700">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facilis
-              dolorum eos cupiditate recusandae ipsa suscipit veniam quis
-              quibusdam, sit sed velit accusamus. Commodi dolorem perspiciatis,
-              tempora ex est perferendis dolore. Lorem ipsum dolor sit amet,
-              consectetur adipisicing elit. Illo, quos et corporis sed expedita
-              nobis earum obcaecati nihil iure dolore eaque quo, nesciunt rerum
-              perspiciatis at. Magni earum vel voluptatibus! Lorem ipsum dolor
-              sit, amet consectetur adipisicing elit. Deserunt, laborum
-              perferendis dolorem ipsa impedit eligendi rem, assumenda sint
-              laboriosam possimus asperiores, vero enim qui expedita voluptates
-              in illo? Corrupti, sunt?
+              {post.excerpt}
               <Box
+                as="span"
+                d="block"
                 position="absolute"
                 width="calc(100% + 10px)"
                 height="20"
@@ -216,7 +216,7 @@ const Post = props => {
           </Box>
 
           <Box gridArea="cta" mt={3}>
-            <Link to="/">
+            <Link to={`/post/${post.frontmatter.slug}`}>
               <ChakraLink
                 fontFamily="heading"
                 fontWeight="600"
@@ -248,7 +248,7 @@ const Post = props => {
   )
 }
 
-const Latest = () => {
+const Latest = ({ posts }) => {
   return (
     <Box maxW="containers.lg" px="6" mx="auto" pt="16" pb="24">
       <Heading as="h2" size="xl" mb="10">
@@ -256,178 +256,47 @@ const Latest = () => {
       </Heading>
 
       <Stack spacing="20">
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        {posts.map(post => (
+          <Post post={post} />
+        ))}
       </Stack>
     </Box>
   )
 }
 
-const waveAnimation = keyframes({
-  from: {
-    transform:
-      "rotate(15deg) translateX(-5px) translate(-40px, -30px) scaleX(-1) scale(0.8)",
-  },
-  to: {
-    transform:
-      "rotate(45deg) translate(5px, 20px) translate(-40px, -30px) scaleX(-1) scale(0.8)",
-  },
-})
+const IndexPage = ({ data: { allMdx } }) => {
+  const posts = allMdx.edges.map(({ node }) => node)
 
-const Bold = props => <Text d="inline" fontWeight="bold" {...props} />
+  return (
+    <Layout>
+      <SEO title="Adrian Aleixandre" />
+      <Header />
+      <Hero post={posts[0]} />
+      <Latest posts={posts.slice(1)} />
+      <Footer />
+    </Layout>
+  )
+}
 
-const Footer = () => {
-  const data = useStaticQuery(graphql`
-    query FooterMetaQuery {
-      site {
-        siteMetadata {
-          email
-          author
-          github
+export const pageQuery = graphql`
+  query HomePageQuery {
+    allMdx(limit: 4, sort: { fields: frontmatter___published, order: DESC }) {
+      edges {
+        node {
+          id
+          body
+          timeToRead
+          excerpt(pruneLength: 500)
+          frontmatter {
+            slug
+            title
+            published(formatString: "MM.DD.YYYY")
+            tags
+          }
         }
       }
     }
-  `)
-  const { email, author, github } = data.site.siteMetadata
-
-  return (
-    <Box bg="orange.500" py="16" color="white">
-      <Stack maxW="containers.lg" mx="auto" px="6" spacing="6">
-        <Flex direction="row" align="center" flexWrap="wrap">
-          <Heading size="xl" my="0">
-            Hello!
-            <Box
-              ml="3"
-              mt="-5px"
-              d="inline"
-              as={IoMdHand}
-              animation={`${waveAnimation} 1s ease-in-out infinite alternate`}
-              transformOrigin="bottom center"
-            />
-          </Heading>
-
-          <Stack isInline flex="1" justify="flex-end" spacing="2">
-            <IconButton
-              as="a"
-              target="_blank"
-              href={`https://twitter.com/${author}`}
-              icon={FiTwitter}
-              size="lg"
-              variant="ghost"
-              rounded="full"
-              _hover={{ color: "blue.400", bg: "white" }}
-              _focus={{ boxShadow: "0 0 0 2px white" }}
-              aria-label="Link to my Twitter"
-            />
-
-            <IconButton
-              as="a"
-              target="_blank"
-              href={`https://github.com/${github}`}
-              icon={FiGithub}
-              size="lg"
-              variant="ghost"
-              rounded="full"
-              _hover={{ color: "gray.600", bg: "white" }}
-              _focus={{ boxShadow: "0 0 0 2px white" }}
-              aria-label="Link to my GitHub"
-            />
-          </Stack>
-        </Flex>
-
-        <Stack spacing="4" maxW={[null, "sm"]}>
-          <Text>
-            <Icon as={FiUser} mr="1" />
-            <Bold>About me</Bold>
-            <br />
-            I'm <Bold>Adrian Aleixandre</Bold>, an engineer and designer in
-            Fargo, ND.
-          </Text>
-          <Text>
-            <Icon as={FiImage} mr="1" />
-            <Bold>My vision</Bold>
-            <br />I am passionate about building UX-research backed products in
-            autonomous cross-functional teams.
-          </Text>
-          <Text>
-            <Icon as={FiCpu} mr="1" />
-            <Bold>Interests</Bold>
-            <br />
-            My favorite technical tools are <Bold>React, Elm, and Elixir</Bold>.
-            I love me a steaming latte or a milk stout.
-          </Text>
-          <Text>
-            <Icon as={FiMail} mr="1" />
-            <Bold>Contact</Bold>
-            <br />
-            Drop me a line at{" "}
-            <ChakraLink href={`mailto:${email}`} fontWeight="bold">
-              {email}
-            </ChakraLink>{" "}
-            or on Twitter{" "}
-            <ChakraLink
-              textDecoration="underline"
-              isExternal
-              href={`https://twitter.com/${author}`}
-              aria-label={`Link to my twitter page ${author}`}
-            >
-              <Icon as={FiTwitter} mr="1" />
-              {author}
-            </ChakraLink>
-          </Text>
-        </Stack>
-        <Flex align="center" flexWrap="wrap">
-          <Stack>
-            <Box width="32" height="1px" bg="white" />
-            <Text fontFamily="body" fontWeight="500">
-              <Icon
-                transform="translateY(-2px)"
-                color="white"
-                as={MdCopyright}
-              />{" "}
-              Adrian Aleixandre &bull; {new Date().getFullYear()}
-            </Text>
-          </Stack>
-
-          <Text
-            ml={[null, "auto"]}
-            px="3"
-            py="1"
-            bg="gray.800"
-            transform={[
-              null,
-              "skew(0deg) rotate3d(0, 1, 0, 15deg) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -4deg) translateY(3px)",
-            ]}
-            css={{ perspective: "100px" }}
-            shadow="3px 4px 0 rgba(0,0,0,0.3), -3px -4px 0 rgba(255,255,255,0.1)"
-            mt={[8, 0]}
-          >
-            Made with{" "}
-            <Icon
-              aria-label="love"
-              transform="translateY(-1px)"
-              color="red.400"
-              as={FiHeart}
-            />{" "}
-            in Fargo, ND
-          </Text>
-        </Flex>
-      </Stack>
-    </Box>
-  )
-}
-
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Adrian Aleixandre" />
-    <Header />
-    <Hero />
-    <Latest />
-    <Footer />
-  </Layout>
-)
+  }
+`
 
 export default IndexPage

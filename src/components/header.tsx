@@ -1,6 +1,5 @@
 /* @jsx jsx */
 import { Link } from "gatsby"
-import PropTypes from "prop-types"
 import React from "react"
 import { jsx } from "@emotion/core"
 import { useStaticQuery, graphql } from "gatsby"
@@ -105,10 +104,6 @@ const Header = () => {
       </Flex>
     </Box>
   )
-}
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
 }
 
 Header.defaultProps = {
