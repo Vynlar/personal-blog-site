@@ -15,7 +15,7 @@ import {
   Badge,
 } from "@chakra-ui/core"
 
-import { FiChevronsRight } from "react-icons/fi"
+import { FiChevronsRight, FiStar } from "react-icons/fi"
 
 import Layout from "../components/layout"
 import Header from "../components/header"
@@ -23,9 +23,33 @@ import Footer from "../components/footer"
 import SEO from "../components/seo"
 import { possibleColors, getColorByIndex } from "../utils/color"
 
+const Background = props => {
+  return (
+    <Box
+      css={{
+        maskImage:
+          "linear-gradient(to bottom right, transparent 50%, black 100%)",
+      }}
+      background={`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`}
+      {...props}
+    />
+  )
+}
+
 const Hero = ({ post }) => {
   return (
-    <Box bg="gray.800">
+    <Box bg="gray.800" position="relative">
+      <Background
+        position="absolute"
+        top="0"
+        bottom="0"
+        left="0"
+        right="0"
+        css={{
+          maskImage:
+            "linear-gradient(to bottom right, black 0%, transparent 50%, black 100%)",
+        }}
+      />
       <Flex
         minHeight={["lg", null, "xl"]}
         align="center"
@@ -58,6 +82,8 @@ const Hero = ({ post }) => {
             </Box>
 
             <Text
+              d="flex"
+              alignItems="center"
               fontFamily="heading"
               fontWeight="600"
               fontSize="sm"
@@ -65,7 +91,8 @@ const Hero = ({ post }) => {
               mb="2"
               gridArea="subheader"
             >
-              Latest Post
+              <Icon as={FiStar} mr="1" color="yellow.300" opacity={0.6} />
+              Featured Post
             </Text>
 
             <Box gridArea="date" alignSelf="flex-end" my={[4, 0]}>
@@ -86,20 +113,12 @@ const Hero = ({ post }) => {
               overflow="hidden"
               position="relative"
               gridArea="preview"
+              css={{
+                maskImage:
+                  "linear-gradient(to bottom, black 30%, transparent 100%)",
+              }}
             >
-              <Text>
-                {post.excerpt}
-                <Box
-                  as="span"
-                  d="block"
-                  position="absolute"
-                  width="calc(100% + 10px)"
-                  height="20"
-                  bottom="0"
-                  left="-5px"
-                  background="linear-gradient(#1A202C00, #1A202C)"
-                />
-              </Text>
+              <Text>{post.excerpt}</Text>
             </Box>
 
             <Box
@@ -199,20 +218,15 @@ const Post = ({ post, ...props }) => {
           borderColor={[null, "gray.300"]}
           pl={[0, "6"]}
         >
-          <Box height="32" overflow="hidden" position="relative">
-            <Text color="gray.700">
-              {post.excerpt}
-              <Box
-                as="span"
-                d="block"
-                position="absolute"
-                width="calc(100% + 10px)"
-                height="20"
-                bottom="0"
-                left="-5px"
-                background="linear-gradient(rgba(255,255,255,0), rgba(255,255,255,1))"
-              />
-            </Text>
+          <Box
+            height="32"
+            overflow="hidden"
+            css={{
+              maskImage:
+                "linear-gradient(to bottom, black 30%, transparent 100%)",
+            }}
+          >
+            <Text color="gray.700">{post.excerpt}</Text>
           </Box>
 
           <Box gridArea="cta" mt={3}>

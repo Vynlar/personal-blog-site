@@ -23,6 +23,7 @@ import {
   Flex,
   Heading,
   IconButton,
+  useTheme,
 } from "@chakra-ui/core"
 
 const waveAnimation = keyframes({
@@ -39,6 +40,7 @@ const waveAnimation = keyframes({
 const Bold = props => <Text as="span" fontWeight="bold" {...props} />
 
 const Footer = () => {
+  const { colors } = useTheme()
   const data = useStaticQuery(graphql`
     query FooterMetaQuery {
       site {
@@ -53,7 +55,11 @@ const Footer = () => {
   const { email, author, github } = data.site.siteMetadata
 
   return (
-    <Box bg="orange.500" py="16" color="white">
+    <Box
+      background={`linear-gradient(160deg, ${colors.orange["400"]} 0%, ${colors.orange["500"]} 30%, ${colors.orange["600"]})`}
+      py="16"
+      color="white"
+    >
       <Stack maxW="containers.lg" mx="auto" px="6" spacing="6">
         <Flex direction="row" align="center" flexWrap="wrap">
           <Heading size="xl" my="0">
