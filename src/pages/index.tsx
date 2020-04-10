@@ -67,7 +67,7 @@ const Hero = ({ post }) => {
             ]}
             columnGap="10"
             templateRows={["auto", "auto minmax(170px, 1fr)"]}
-            templateColumns={["1fr", "1fr 2fr"]}
+            templateColumns={["1fr", "4fr 5fr"]}
           >
             <Box gridArea="title">
               <Heading
@@ -109,7 +109,7 @@ const Hero = ({ post }) => {
             </Box>
 
             <Box
-              height="32"
+              maxHeight="32"
               overflow="hidden"
               position="relative"
               gridArea="preview"
@@ -172,7 +172,9 @@ const Post = ({ post, ...props }) => {
         templateColumns={["1fr", "1fr 3fr"]}
       >
         <Heading as="h3" size="lg" gridArea="title" pl={[0, "6"]}>
-          {post.frontmatter.title}
+          <Link to={`/post/${post.frontmatter.slug}`}>
+            {post.frontmatter.title}
+          </Link>
         </Heading>
 
         <Text
@@ -219,7 +221,7 @@ const Post = ({ post, ...props }) => {
           pl={[0, "6"]}
         >
           <Box
-            height="32"
+            maxHeight="32"
             overflow="hidden"
             css={{
               maskImage:

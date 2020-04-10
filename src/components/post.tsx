@@ -42,10 +42,14 @@ const shortcodes = {
     <Heading {...props} as="h5" size="xs" mt="2" mb="1" />
   ),
   h6: (props: BoxProps) => <Heading {...props} as="h6" size="xs" mt="1" />,
-  p: (props: BoxProps) => <Text fontSize="lg" {...props} />,
-  ul: (props: BoxProps) => <List styleType="disc" {...props} />,
-  ol: (props: BoxProps) => <List styleType="decimal" {...props} />,
-  li: ListItem,
+  p: (props: BoxProps) => <Text mb="4" fontSize="lg" {...props} />,
+  ul: (props: BoxProps) => (
+    <List my="4" styleType="disc" spacing="3" {...props} />
+  ),
+  ol: (props: BoxProps) => (
+    <List my="4" styleType="decimal" spacing="3" {...props} />
+  ),
+  li: (props: BoxProps) => <ListItem fontSize="lg" {...props} />,
   a: (props: LinkProps) => <Link color="orange.700" {...props} />,
   hr: Divider,
   thematicBreak: Divider,
@@ -58,7 +62,7 @@ const shortcodes = {
       borderLeft="5px solid"
       borderColor="orange.300"
     >
-      <Text {...props} />
+      <Text {...props} mb="-16px" />
     </Box>
   ),
   image: (props: ImageProps) => <Image maxW="100%" {...props} />,
