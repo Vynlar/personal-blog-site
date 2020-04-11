@@ -1,0 +1,166 @@
+---
+title: Reusability in React through Composition
+slug: reusable-react-components
+published: 2020-04-11
+featured: true
+tags:
+  - React
+  - Best Practices
+  - Refactoring
+---
+
+import { Icon, Tooltip } from "@chakra-ui/core"
+
+I recently identified a common anti-pattern that plagues a lot of React code. This pattern starts off
+as innocent, as many anti-patterns do. This pattern seems like the simplest solution to the problem at hand but leads
+to the death of reusability by one-thousand papercuts. This pattern is **props**.
+
+Now before you get out the pitchforks, hear me out. Props are one of the handful of tools we have on our React
+toolbelt for passing around data. It is often taught that props are the way to get data from one component to another.
+I would agree with this in fact: props are the way to get _data_ between components; however, props are often
+abused into tasks they are not suited for.
+
+## Optional Elements
+
+One of these prop anti-patterns is **using props to indicate optional elements**.
+I will use the common situation of a form to illustrate.
+_Note: This example is almost verbatim out of a real codebase I have worked on._
+
+Let's start with the not so great API that we started with:
+
+```jsx
+<FormElement label="Email" name="email" value={/* */} onChange={/* */} />
+```
+
+This was the first version of our `FormElement` component. It seemed straight forward enough. We wanted to
+have an easy way to encapsulate the idea of a _input_ with an associated _label_.
+
+Quite quickly, the **scope of the component began to grow**:
+
+```jsx
+<FormElement
+  label="Email"
+  name="email"
+  value={/* */}
+  onChange={/* */}
+  isErrored={/* */}
+  helperText="..."
+/>
+```
+
+And grow...
+
+```jsx
+<FormElement
+  label="Email"
+  name="email"
+  value={/* */}
+  onChange={/* */}
+  isErrored={/* */}
+  helperText="..."
+  rightInputIcon={/* */}
+  leftInputIcon={/* */}
+  input={Input}
+  required
+/>
+```
+
+The straw that broke the camels back was when we ran into a situation where we needed to
+move the helper text, but only in some situations. How do we handle that? A new prop called `upperHelperText`? A prop called `helperTextPosition`?
+This had to stop.
+
+## Composition to the rescue!
+
+Like many problems, the solution is to break the problem into many smaller problems. We can do this by using the
+other main method of passing information between components: **children <Tooltip hasArrow label={`I realize that children is just a special prop but from a semantic standpoint, it is sufficiently different.`} ><Icon name='info-outline' /></Tooltip>**.
+
+Let's go ahead and dream up a nicer API that still handles all the problems we have discovered:
+
+```jsx
+<FormElement isErrored={/* */}>
+  <Label>
+    Email <Required />
+  </Label>
+
+  <InputGroup>
+    <InputRightElement>
+      <Icon name="search" />
+    </InputRightElement>
+    <Input name="email" value={/* */} onChange={/* */} />
+  </InputGroup>
+
+  <HelperText>Email</HelperText>
+  <FormError>Email is required</FormError>
+</FormElement>
+```
+
+This API is pretty much directly taken from the great work by [@thesegunadebayo](https://twitter.com/thesegunadebayo)
+on [Chakra UI](https://chakra-ui.com/).
+
+In order to move our helper text to be above the input, we don't need another prop! We can just... move it!
+
+```jsx {3}
+<FormElement isErrored={/* */}>
+  <Label>
+    Email <Required />
+  </Label>
+  <HelperText>Email</HelperText>
+
+  <InputGroup>
+    <InputRightElement>
+      <Icon name="search" />
+    </InputRightElement>
+    <Input name="email" value={/* */} onChange={/* */} />
+  </InputGroup>
+
+  <FormError>Email is required</FormError>
+</FormElement>
+```
+
+Here are some advantages of this new API:
+
+- You can insert new elements anywhere you want. Requirements change? Throw a special case right on in there!
+- You can disclude elements you don't need for this situation. Perhaps you don't want to display errors in this field because they are being
+  handeled somewhere else in the UI.
+- You can reorder elements easily.
+
+Now that we have the more flexible API thought out, some may ask _"How am I supposed to migrate my entire codebase to use this new pattern?"_
+
+## Interconnectivity
+
+These components are now nice and separate, but it is possible that they still need to pass data between them. You have two options for this situation:
+`React.cloneElement`, and `React.createContext`.
+
+If your children are required to not be nested deeply, then you can get away with `cloneElement`; however, this is a dangerous assumption because you limit
+the flexiblility of the resulting API. Sometimes it is the correct choice, and is also entirely internal to the component and can be more simply refactored later.
+
+Using `createContext` is more flexible but also more complicated. I would generally prefer the context approach as it allows for the consumer to insert layers of
+nesting without breaking your data-passing. These sorts of errors are hard to detect unless you know the implementation of the component which
+inherently breaks encapsulation.
+
+## Migration Path
+
+The key to refactoring props into composable components is the fact that the prop API is _more limited_ than the component API. This means
+that we can implement the component API and then replace the implementation of our original prop-based component using our new components _internally_.
+Let's see how that would work:
+
+1. Start off with a prop-based API we want to refactor
+2. Refactor this component to use a component-based API
+3. Create an identical copy of our orgiginal prop-based API but this time, implemeneted using our new small components. This allows for backwards compatibility.
+4. Export _both_ the old API (newly implemeneted internally) temporarily, and our new API (the small composable components).
+
+This means we can start using the new API, thus avoiding adding to the problem, and allow us to maintain our old API working for the time being.
+The important next step is, every time you encounter the old API while you are working, **you must refactor to replace it with the new API.**
+Once all the old instances of the API are removed (you may just go through and swap them out when the number gets low, or if you have extra
+time to refactor), you can then delete the temporary export.
+
+Congratulations! You now have a reusable, composable API.
+
+## Takeaways
+
+You can use this pattern in many places and situations. Here's my rule of thumb:
+
+> If a component has multiple constituent parts, if any are optional, they should be optionally included as children, not optional props.
+
+Avoid props that affect which elements are rendered. Leave that up to the consumer of the API. Or, create a "default implementation" and export both
+that _and_ the constituent parts.

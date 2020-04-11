@@ -74,7 +74,7 @@ const Hero = ({ post }) => {
                 as={Link}
                 d="block"
                 to={`/post/${post.frontmatter.slug}`}
-                size="2xl"
+                size={post.frontmatter.title.length > 40 ? "xl" : "2xl"}
                 mb={["0", "4"]}
               >
                 {post.frontmatter.title}

@@ -106,7 +106,11 @@ const Post = ({ data: { mdx } }) => {
           rowGap="6"
           columnGap="12"
         >
-          <Heading as="h1" size="2xl" gridArea="title">
+          <Heading
+            as="h1"
+            size={mdx.frontmatter.title.length > 40 ? "xl" : "2xl"}
+            gridArea="title"
+          >
             {mdx.frontmatter.title}
           </Heading>
 
