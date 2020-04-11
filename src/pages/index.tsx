@@ -49,6 +49,7 @@ const Hero = ({ post }) => {
           maskImage:
             "linear-gradient(to bottom right, black 0%, transparent 50%, black 100%)",
         }}
+        zIndex={1}
       />
       <Flex
         minHeight={["lg", null, "xl"]}
@@ -58,6 +59,8 @@ const Hero = ({ post }) => {
         px="6"
         mx="auto"
         color="white"
+        position="relative"
+        zIndex={2}
       >
         <Box transform={["none", "translateY(-15px)"]}>
           <Grid
@@ -69,11 +72,8 @@ const Hero = ({ post }) => {
             templateRows={["auto", "auto minmax(170px, 1fr)"]}
             templateColumns={["1fr", "4fr 5fr"]}
           >
-            <Box gridArea="title">
+            <Box gridArea="title" position="relative">
               <Heading
-                as={Link}
-                d="block"
-                to={`/post/${post.frontmatter.slug}`}
                 size={post.frontmatter.title.length > 40 ? "xl" : "2xl"}
                 mb={["0", "4"]}
               >
@@ -128,11 +128,26 @@ const Hero = ({ post }) => {
               gridArea="cta"
               mt={[5, 0]}
             >
-              <Link to={`/post/${post.frontmatter.slug}`}>
+              <Link
+                to={`/post/${post.frontmatter.slug}`}
+                css={{
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    pointer: "cursor",
+                  },
+                }}
+              >
                 <ChakraLink
                   as="span"
                   fontFamily="heading"
                   fontWeight="600"
+                  position="relative"
+                  zIndex={3}
                   _hover={{
                     "& > .icon": {
                       transform: "translate(4px, -1px)",
