@@ -13,9 +13,7 @@ import {
   LinkProps,
   ImageProps,
   Grid,
-  Stack,
   Flex,
-  useTheme,
   Badge,
 } from "@chakra-ui/core"
 import { MDXProvider } from "@mdx-js/react"

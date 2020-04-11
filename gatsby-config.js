@@ -1,10 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `Adrian Aleixandre`,
-    description: `TODO`,
+    title: `Adrian Aleixandre - Developer + Designer`,
+    description: `The musings of a front-end developer and designer. Discussion about React, Elm, and other interesting UI/UX topics.`,
     author: `@_aaleixandre`,
     github: "Vynlar",
     email: "adrian.aleixandre@gmail.com",
+    siteUrl: `https://adrianaleixandre.com`,
   },
   plugins: [
     {
@@ -26,11 +27,11 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `Adrian Aleixandre`,
+        short_name: `AAleixandre`,
         start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        background_color: `#1A202C`,
+        theme_color: `#DD6B20`,
         display: `minimal-ui`,
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },

@@ -21,7 +21,7 @@ import Layout from "../components/layout"
 import Header from "../components/header"
 import Footer from "../components/footer"
 import SEO from "../components/seo"
-import { possibleColors, getColorByIndex } from "../utils/color"
+import { getColorByIndex } from "../utils/color"
 
 const Background = props => {
   return (
