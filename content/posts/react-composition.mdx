@@ -13,10 +13,10 @@ import { Icon, Tooltip } from "@chakra-ui/core"
 
 I recently identified a common anti-pattern that plagues a lot of React code. This pattern starts off
 as innocent, as many anti-patterns do. This pattern seems like the simplest solution to the problem at hand but leads
-to the death of reusability by one-thousand papercuts. This pattern is **props**.
+to the death of reusability by one-thousand paper-cuts. This pattern is **props**.
 
 Now before you get out the pitchforks, hear me out. Props are one of the handful of tools we have on our React
-toolbelt for passing around data. It is often taught that props are the way to get data from one component to another.
+tool-belt for passing around data. It is often taught that props are the way to get data from one component to another.
 I would agree with this in fact: props are the way to get _data_ between components; however, props are often
 abused into tasks they are not suited for.
 
@@ -121,7 +121,7 @@ Here are some advantages of this new API:
 
 - You can insert new elements anywhere you want. Requirements change? Throw a special case right on in there!
 - You can disclude elements you don't need for this situation. Perhaps you don't want to display errors in this field because they are being
-  handeled somewhere else in the UI.
+  handled somewhere else in the UI.
 - You can reorder elements easily.
 
 Now that we have the more flexible API thought out, some may ask _"How am I supposed to migrate my entire codebase to use this new pattern?"_
@@ -132,7 +132,7 @@ These components are now nice and separate, but it is possible that they still n
 `React.cloneElement`, and `React.createContext`.
 
 If your children are required to not be nested deeply, then you can get away with `cloneElement`; however, this is a dangerous assumption because you limit
-the flexiblility of the resulting API. Sometimes it is the correct choice, and is also entirely internal to the component and can be more simply refactored later.
+the flexibility of the resulting API. Sometimes it is the correct choice, and is also entirely internal to the component and can be more simply refactored later.
 
 Using `createContext` is more flexible but also more complicated. I would generally prefer the context approach as it allows for the consumer to insert layers of
 nesting without breaking your data-passing. These sorts of errors are hard to detect unless you know the implementation of the component which
@@ -146,8 +146,8 @@ Let's see how that would work:
 
 1. Start off with a prop-based API we want to refactor
 2. Refactor this component to use a component-based API
-3. Create an identical copy of our orgiginal prop-based API but this time, implemeneted using our new small components. This allows for backwards compatibility.
-4. Export _both_ the old API (newly implemeneted internally) temporarily, and our new API (the small composable components).
+3. Create an identical copy of our original prop-based API but this time, implemented using our new small components. This allows for backwards compatibility.
+4. Export _both_ the old API (newly implemented internally) temporarily, and our new API (the small composable components).
 
 This means we can start using the new API, thus avoiding adding to the problem, and allow us to maintain our old API working for the time being.
 The important next step is, every time you encounter the old API while you are working, **you must refactor to replace it with the new API.**
