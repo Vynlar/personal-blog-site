@@ -10,8 +10,6 @@ tags:
   - Refactoring
 ---
 
-import { Icon, Tooltip } from "@chakra-ui/core"
-
 I recently identified a common anti-pattern that plagues a lot of React code. This pattern starts off
 as innocent, as many anti-patterns do. This pattern seems like the simplest solution to the problem at hand but leads
 to the death of reusability by one-thousand paper-cuts. This pattern is **props**.
@@ -73,7 +71,7 @@ This had to stop.
 ## Composition to the rescue!
 
 Like many problems, the solution is to break the problem into many smaller problems. We can do this by using the
-other main method of passing information between components: **children <Tooltip hasArrow label={`I realize that children is just a special prop but from a semantic standpoint, it is sufficiently different.`} ><Icon name='info-outline' /></Tooltip>**.
+other main method of passing information between components: **children <Tooltip label={`I realize that children is just a special prop but from a semantic standpoint, it is sufficiently different.`} ></Tooltip>**.
 
 Let's go ahead and dream up a nicer API that still handles all the problems we have discovered:
 

@@ -326,10 +326,7 @@ export const pageQuery = graphql`
         }
       }
     }
-    latest: allMdx(
-      limit: 4
-      sort: { fields: frontmatter___published, order: DESC }
-    ) {
+    latest: allMdx(sort: { fields: frontmatter___published, order: DESC }) {
       edges {
         node {
           ...PostData

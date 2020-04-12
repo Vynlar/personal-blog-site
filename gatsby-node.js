@@ -9,11 +9,9 @@
 const path = require("path")
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
-  const { createPage } = actions
-
   const result = await graphql(`
     query {
-      allMdx {
+      allMdx(sort: { fields: frontmatter___published, order: DESC }) {
         edges {
           node {
             id
@@ -32,12 +30,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const posts = result.data.allMdx.edges
 
-  posts.forEach(({ node }) => {
+  console.log("WOWJk")
+
+  posts.forEach(({ node }, index) => {
+    const previousPost = posts[index - 1]
+    const nextPost = posts[index + 1]
     actions.createPage({
       path: `/post/${node.frontmatter.slug}`,
       component: path.resolve(`./src/components/post.tsx`),
       context: {
         id: node.id,
+        previousId: previousPost ? previousPost.node.id : null,
+        nextId: nextPost ? nextPost.node.id : null,
       },
     })
   })
