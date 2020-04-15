@@ -74,6 +74,7 @@ const Hero = ({ post }) => {
           >
             <Box gridArea="title" position="relative">
               <Heading
+                lineHeight="1.1"
                 size={post.frontmatter.title.length > 40 ? "xl" : "2xl"}
                 mb={["0", "4"]}
               >

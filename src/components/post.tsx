@@ -114,12 +114,28 @@ const shortcodes = {
   ),
 }
 
-const Post = ({ data: { post, previousPost, nextPost }, ...rest }) => {
+const Post = ({ data: { site, post, previousPost, nextPost }, ...rest }) => {
+  const imageURL = `${site.siteMetadata.siteUrl}/${post.frontmatter.slug}.png`
+
   return (
     <Layout>
       <SEO
         title={post.frontmatter.title}
         description={post.frontmatter.description}
+        meta={[
+          {
+            name: `twitter:card`,
+            content: `summary_large_image`,
+          },
+          {
+            name: `twitter:image`,
+            content: imageURL,
+          },
+          {
+            name: `og:image`,
+            content: imageURL,
+          },
+        ]}
       />
       <Header />
       <Box maxW="containers.lg" px="6" mx="auto" py="16">
@@ -271,6 +287,11 @@ const Post = ({ data: { post, previousPost, nextPost }, ...rest }) => {
 
 export const pageQuery = graphql`
   query BlogPostQuery($id: String, $nextId: String, $previousId: String) {
+    site {
+      siteMetadata {
+        siteUrl
+      }
+    }
     previousPost: mdx(id: { eq: $previousId }) {
       id
       timeToRead
@@ -298,6 +319,7 @@ export const pageQuery = graphql`
         published(formatString: "MM.DD.YYYY")
         tags
         description
+        slug
       }
     }
   }
