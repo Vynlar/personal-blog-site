@@ -1,0 +1,178 @@
+---
+title: >
+  Learning to "See the Boxes"
+description: >
+  An important skill for designers is to learn to see beneath the UI and understand the boxes that power our apps.
+slug: learning-to-see-the-boxes
+published: 2020-04-14
+featured: false
+tags:
+  - Design
+---
+
+import { Avatar, IconButton, Stack, Flex, Text, Badge } from "@chakra-ui/core"
+import { FlexBox, Bit } from "./examples"
+
+The twitter debate about "should designers code?" is meme-worthy topic, but I'd like to bring the discourse somewhere back
+to the middle. I believe that designers should understand the structure of the elements on the page, but not necessarily understand the
+details for how they get there. I believe the main skill in this is learning to "see the boxes". What I mean by this is to
+be able to look at a design and imagine all the elements inside of containing boxes. This fundamental skill can help designers
+communicate better with developers. Since visual design is, well, _visual_, I've created a visual representation of these boxes
+to help designers learn this skill.
+
+> Note: In order to be successful in developing this skill, go to each example below and look at each element in the "real" copy. Then, find the corresponding
+> orange box below that corresponds. Take note of _why_ that box is where it is based on the series of boxes it is contained in.
+
+For each example, I've implemented a simple UI, and then created a visual representation of the "hidden boxes". Let's start off simple:
+
+<Flex
+  align="center"
+  px="4"
+  py="3"
+  shadow="lg"
+  border="1px"
+  borderColor="gray.200"
+  rounded="md"
+  maxW="sm"
+  justify="space-between"
+  mb="4"
+>
+  <Text fontWeight="bold" fontFamily="heading">
+    Adrian Aleixandre
+  </Text>
+  <Badge fontFamily="heading" variantColor="orange">
+    3 points
+  </Badge>
+</Flex>
+<FlexBox mb="3" justify="space-between" align="center">
+  <Bit />
+  <Bit />
+</FlexBox>
+
+Next, we add another element. We already see that we have _a box inside of a box_. This is critical as it lets us position elements both
+vertically _and_ horizontally.
+
+<Flex
+  align="baseline"
+  px="4"
+  py="3"
+  shadow="lg"
+  border="1px"
+  borderColor="gray.200"
+  rounded="md"
+  maxW="sm"
+  justify="space-between"
+  mb="4"
+  align="center"
+>
+  <Stack spacing="0">
+    <Text fontWeight="bold" fontFamily="heading">
+      Adrian Aleixandre
+    </Text>
+    <Text color="gray.500" fontFamily="heading" fontSize="sm">
+      Developer
+    </Text>
+  </Stack>
+  <Badge fontFamily="heading" variantColor="orange">
+    3 points
+  </Badge>
+</Flex>
+<FlexBox mb="3" justify="space-between" align="center">
+  <FlexBox direction="column">
+    <Bit />
+    <Bit />
+  </FlexBox>
+  <Bit />
+</FlexBox>
+
+This example shows us that the fundamental structure of the underlying layout changes by just moving one element elsewhere.
+This is a simple example of a way that designers can develop empathy for developers in that their changes, while sometimes appearing minor
+can have more impact in the code than expected.
+
+<Flex
+  align="baseline"
+  px="4"
+  py="3"
+  shadow="lg"
+  border="1px"
+  borderColor="gray.200"
+  rounded="md"
+  maxW="sm"
+  justify="space-between"
+  mb="4"
+  direction="column"
+>
+  <Text fontWeight="bold" fontFamily="heading">
+    Adrian Aleixandre
+  </Text>
+  <Stack isInline align="baseline">
+    <Text color="gray.500" fontFamily="heading" fontSize="sm">
+      Developer
+    </Text>
+    <Badge fontFamily="heading" variantColor="orange">
+      3 points
+    </Badge>
+  </Stack>
+</Flex>
+<FlexBox mb="3" direction="column">
+  <Bit />
+  <FlexBox>
+    <Bit />
+    <Bit />
+  </FlexBox>
+</FlexBox>
+
+Finally here's a more complex example with significant nesting:
+
+<Flex
+  align="baseline"
+  px="4"
+  py="3"
+  shadow="lg"
+  border="1px"
+  borderColor="gray.200"
+  rounded="md"
+  maxW="sm"
+  mb="4"
+  direction="row"
+  justify="space-between"
+  align="center"
+>
+  <Stack isInline align="center">
+    <Avatar />
+    <Flex direction="column">
+      <Text fontWeight="bold" fontFamily="heading">
+        Adrian Aleixandre
+      </Text>
+      <Stack isInline align="baseline">
+        <Text color="gray.500" fontFamily="heading" fontSize="sm">
+          Developer
+        </Text>
+        <Badge fontFamily="heading" variantColor="orange">
+          3 points
+        </Badge>
+      </Stack>
+    </Flex>
+  </Stack>
+  <IconButton icon="email" variant="solid" variantColor="blue" />
+</Flex>
+<FlexBox mb="3" justify="space-between" align="center">
+  <FlexBox align="center">
+    <Bit />
+    <FlexBox direction="column">
+      <Bit />
+      <FlexBox>
+        <Bit />
+        <Bit />
+      </FlexBox>
+    </FlexBox>
+  </FlexBox>
+  <Bit />
+</FlexBox>
+
+Hopefully this exercise is helpful in understanding what goes on behind the scenes. Take mind of
+the apps you use every day and try to look under the hood and "see the boxes"!
+
+---
+
+_Get in touch on Twitter or via email me if this was helpful to you!_

@@ -30,11 +30,10 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const posts = result.data.allMdx.edges
 
-  console.log("WOWJk")
-
   posts.forEach(({ node }, index) => {
     const previousPost = posts[index - 1]
     const nextPost = posts[index + 1]
+
     actions.createPage({
       path: `/post/${node.frontmatter.slug}`,
       component: path.resolve(`./src/components/post.tsx`),
