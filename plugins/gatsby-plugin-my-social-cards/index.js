@@ -14,10 +14,10 @@ module.exports = async args => {
         <head>
           <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
         </head>
-        <body style="width: 1200px; height: 630px;">
+        <body style="width: 1200px; height: 630px;" class='p-10'>
           <div class="flex flex-col w-full h-full text-white">
             <div
-              class="flex flex-col justify-end flex-1 bg-gray-800 p-10 mx-5 mt-5"
+              class="flex flex-col justify-end flex-1 bg-gray-800 p-10"
               style="border-top-left-radius: 25px; border-top-right-radius: 25px;"
             >
               <div class="text-4xl text-gray-400 font-bold tracking-widest">
@@ -29,7 +29,7 @@ module.exports = async args => {
             </div>
 
             <div
-              class="text-gray-800 px-10 py-5 text-6xl font-bold border-l-8 border-r-8 border-b-8 border-radius border-gray-800 mx-5 mb-5"
+              class="text-gray-800 px-10 py-5 text-6xl font-bold border-l-8 border-r-8 border-b-8 border-radius border-gray-800"
               style="border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;"
             >
               Adrian Aleixandre
