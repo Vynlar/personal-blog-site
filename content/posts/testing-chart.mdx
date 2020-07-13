@@ -1,0 +1,75 @@
+---
+title: The Truth about Testing React Apps
+description: Most tests don't catch bugs. So what's the point?
+slug: testing-react-apps
+published: 2020-07-12
+featured: true
+tags:
+  - React
+  - Best Practices
+  - Testing
+---
+
+
+# tl;dr: The Chart&trade;
+This chart is a summary of my approach to testing React apps.
+
+||Component/Hook|Utility|Feature|Browser|
+|-|-|-|-|-|
+|**Purpose**|Encourages good design|Virually free. Just Do It&trade;!|Show your app _probably_ works|_Prove_ your app _actually_ works|
+|**Execution Speed**|Lightning fast|Lightning fast|Fast|Slow _(Like, wayyyy slow)_|
+|**Confidence**|Low|Low|Medium|Very High|
+|**Quantity**|Basically 100% coverage|Literally 100% coverage|All features in medium detail|Mission critical + happy path only|
+|**My Tool(s) of Choice**|jest + @testing-library/react + @testing-library/react-hooks|jest|jest + @testing-library/react|cypress|
+
+# Component/Hook Tests
+
+## Definition
+
+> Component/hook tests are unit tests that make sure a component and/or hook does what you expect it to do in isolation.
+
+This is the biggest thing you need to understand about testing individual React components or hooks is: **Component/hook tests don't catch bugs.**
+Instead, they force you to write better components.
+
+## Recommended Usage
+
+Write component/hook tests _while_ designing and implementing your component and/or hook. Writing component tests afterwards throws away the biggest benefit: forcing you to think about the component's API.
+
+# Utility Tests
+
+## Definition
+
+> Utility Tests are unit tests that test pure or otherwise isolated utility/helper functions.
+
+Every apps has some utility/helper functions. These sorts of functions are often quite simple (and often pure). It is usually easy to write tests for this kind of code and therefore there's little reason not to.
+
+# Feature Tests
+
+## Definition
+
+> Feature Tests are unit tests that interact with a feature like a user would. These test give you confidence that features work as expected.
+
+Feature tests are where the bulk of your time writing tests will be spent. These tests provide a good difficulty:confidence ratio. **These are the tests that will actually catch bugs!**
+
+Feature tests render a feature to the page, click around, type into input fields, and assert things about the page. Feature tests run in a speedy environment (like JSDOM) and therefore you can have a lot of them without too much impact on
+how quickly your tests run.
+
+# Browser Tests
+
+## Definition
+
+> Browser Tests run your _entire_ app in a real browser and give you confidence that the app is plugged together correctly.
+
+Browser tests are easy to write but can be challenging to keep up to date. Additionally, they are quite slow to run. I recommend having high Browser Test coverage of mission critical features (like signup, login, and anything else that is _very important_) and then
+some basic "happy path" coverage of the rest of the app. For example, if there's a complex wizard, just have one Browser Test that fills in some typical values and ensures that the basics work. (Let the Feature Tests ensure that the details work)
+
+# Summary
+
+Testing user interfaces is _damn hard_ because no matter how we slice it, we are testing something for _humans_. I recommend you talk over these ideas with your team to determine what makes sense for you. This is my experience working with
+React, but depending on your situation, things could easily be different.
+
+### My general recommendation is:
+- **If you're starting a new project** (or feature), start from the bottom up: Use a TDD approach and integrate component/hook, utility, and feature tests into your codebase. As the product takes shape, you can add Browser tests but don't rush into it.
+- **If you have an existing product** with few/no tests, start from the top down: Write Browser tests to gain a lot of traction quickly, and then work the other types of tests into the codebase over time.
+
+_P.S. I'd love to chat about your experience with testing React apps. What has worked for your team? What parts of my approach do you agree with? Disagree with? Reach out to me on twitter or via email below._

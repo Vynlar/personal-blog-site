@@ -2,10 +2,11 @@ const nodeHtmlToImage = require("node-html-to-image")
 const path = require("path")
 
 module.exports = async args => {
+  if (process.env.NODE_ENV !== "production") return
+
   const { markdownNode } = args
   const { title, slug } = markdownNode.frontmatter
   const outputPath = path.join("./public", `${slug}.png`)
-  console.log("PATH: ", outputPath)
 
   await nodeHtmlToImage({
     output: outputPath,
