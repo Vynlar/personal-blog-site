@@ -109,13 +109,13 @@ const Footer = () => {
             <Bold>About me</Bold>
             <br />
             I'm <Bold>Adrian Aleixandre</Bold>, an engineer and designer in
-            Fargo, ND. Right now I'm building web apps at{" "}
+            Fargo, ND. Right now I'm working at{" "}
             <ChakraLink
               textDecoration="underline"
               isExternal
-              href="https://bushelpowered.com"
+              href="https://www.simondata.com/"
             >
-              Bushel
+              Simon Data
             </ChakraLink>
             .
           </Text>
@@ -129,8 +129,9 @@ const Footer = () => {
             <Icon as={FiCpu} mr="1" />
             <Bold>Interests</Bold>
             <br />
-            My favorite technical tools are <Bold>React, Elm, and Elixir</Bold>.
-            I love me a steaming latte or a milk stout.
+            My favorite technical tools are{" "}
+            <Bold>React, Elm, Clojure, and Elixir</Bold>. I make home-made ice
+            cream often with neat flavors like "Toast", and "Coffee Stout".
           </Text>
           <Text>
             <Icon as={FiMail} mr="1" />
