@@ -10,6 +10,9 @@ module.exports = async args => {
 
   await nodeHtmlToImage({
     output: outputPath,
+    puppeteerArgs: {
+      args: ["--no-sandbox"]
+    },
     html: `
       <html>
         <head>
