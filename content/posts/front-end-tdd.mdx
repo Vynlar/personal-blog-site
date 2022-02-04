@@ -1,0 +1,50 @@
+---
+title: Why is front-end TDD hard?
+description: Practicing TDD with React is a rough experience. Why is this? How can we make it better?
+slug: react-front-end-tdd
+published: 2022-02-03
+featured: true
+tags:
+  - React
+  - TDD
+---
+
+I am a practitioner of test-driven development. I feel the code I write is better while practicing TDD. I am also a front-end developer, mainly using React to build web applications. Recently I have uncovered a tension between these two aspects of myself. Over the last six months I’ve spent more time working on back-end (python) code than front-end. Naturally, I’ve been applying TDD to my work. Almost immediately, I noticed how much easier it was to practice TDD in Python than React. It was only after experiencing this did I realize how unpleasant front-end TDD is. In this post, I explore why this is and what we can do.
+
+## Developer Experience
+
+### Test Performance
+
+One noticeable difference is test execution speed. I can run tens or hundreds of Python unit tests in the time that I can run just a few React tests using `@testing-library/react` and `jest`. This is certainly impacted by my particular environment and project, but I believe it is because front-end tests execute more code than the Python unit tests on average. The primitive operations in back-end tests such as constructing objects, calling functions, and asserting return values are often faster than common front-end test operations like rendering React components, firing DOM events, and searching for matching elements. One option we have is to enable some front-end code to be tested outside of a browser-like context. I talk about this more later on.
+
+### Test Failure Messages
+
+When practicing TDD, it is important to consider what someone will see if a test fails. Ideally, all the information she would need to understand and fix the problem would be contained in the message itself. For example, the expected and actual values, the line of code, or even a custom message. In front-end tests, I often have issues with unhelpful error messages. The most common example is when the test is searching for an element matching some description but it does not find it. `could not find an element matching the selector` Does this tell you what went wrong? Not really. The element could not exist for many different reasons:
+
+- It could be too early and the element will appear in the future.
+- The UI could be in an error state, causing the expected element to be missing.
+- The element could exist but the selector does not quite match. For example, `findByText(/login/i)` will match a button containing `Login` but will error in a confusing way if the button changes to contain `Log in`. Critically, the tool does nothing to help reveal this simple mistake.
+
+### Lack of Visibility
+
+A big issue while practicing front-end TDD and writing front-end tests in general is the opaqueness of the state of the DOM. In a full browser, we can see the UI in all its glory; however, in a typical unit test setup, we are running the app headlessly for speed. I think there is a hole to fill in the `@testing-library` ecosystem for a tool that helps reveal the current state of the DOM without rendering it visually. This could improve developer experience without paying the full performance cost of a tool like Cypress. Especially if this tool could be executed only when there is a problem, rather than for all tests. The current behavior, logging a pretty-printed string of the whole DOM, is primitive and often unhelpful. Not to mention intimidating for those learning this for the first time. I find myself trying to answer the question “what happened?” more of the time than actually thinking about the problem.
+
+## Simplicity in React
+
+I think that React applications tend towards complexity. I’m using Rich Hickey’s notion of complexity from his well known talk [Simple Made Easy](https://www.youtube.com/watch?v=SxdOUGdseq4). In summary, Rich defines complexity as “interwovenness”, that is, how much things are entangled. Conversely, simplicity is defined by a lack of entanglement. In simpler terms, simple is the ability to stand alone. Applying this definition, the React applications I have worked on tend towards lots of interweaving. It comes back to one core problem: the coupling of view and state. When you use `useState` in a React component which also handles rendering, you have made a complex component.
+
+I know it has fallen out of fashion, but I think Redux solves this problem well. Specifically, it gives us a way to deal with state separately from the view. And, as a lover of TDD, it models state changes as pure functions which are innately testable. A Redux-based application can be tested almost entirely without rendering the actual UI, simply by dispatching actions and asserting on the outputs of selectors. (I haven’t personally tried this, but it may be possible to run Redux without jsdom which would be a big performance win.) In Redux world, React components are only responsible for the view and therefore are easily testable. There is a project in the Clojure ecosystem called re-frame which has a lot of conceptual overlap with Redux and the author [admits he often does not test the view components at all](https://github.com/day8/re-frame/blob/master/docs/Testing.md#what-to-test). I admit that my first-hand experience with Redux is minimal, and I'm sure there are thorns I am unaware of but from the perspectie of testability and simplicity, Redux is attractive.
+
+### Thinking in Interfaces
+
+A common idea in the front-end testing world is the “testing trophy” which is in contrast to the well-known “testing pyramid”. Take a moment to look at the [testing trophy graphic](https://kentcdodds.com/blog/the-testing-trophy-and-testing-classifications). I think that this model is an effective way to achieve _high confidence_; however, confidence is not the only goal. Specifically, it leaves out the code design and architectural benefits that TDD provides. A common misconception about TDD is notion that the primary benefit is a great test suite. I argue this is not true. The test suite resulting from TDD is incomplete from a confidence perspective. We don't usually write end-to-end tests or even many integration tests. This is okay because _the main benefit of TDD is not the tests, but the increased code quality_. Trying to apply the testing trophy to TDD creates friction because their purposes are misaligned. TDD encourages the careful design of interfaces between components by forcing you to define their behavior in more detail than you otherwise might. I made the mistake of trying to apply the testing trophy to TDD and discovered that I was using the wrong tool for the problem. High confidence is important, and the testing trophy can get that for you, but I encourage you to write many more, much smaller tests while practicing TDD than the testing trophy would suggest.
+
+## What can we do?
+
+I want fast front-end tests, great error messages, and a way to quickly understand the state of the DOM. What can we do to get there?
+
+- Improve error message for failed element selectors in `@testing-library`
+- Make a better way to explore the state of the DOM in tests. Perhaps some sort of "inspector" similar to those found in a browser that lets you explore the DOM interactively.
+- Reduce feedback time by adopting faster tools (`jsdom` alternatives? `jest` alternatives? `vitest`, `uvu`)
+- Simplify code such that it doesn’t need `jsdom` run
+- Performance test 3rd party components for their impact on test runtimes
